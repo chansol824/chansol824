@@ -31,7 +31,7 @@ class Obs_detect:  # 클래스 이름 정의
 
 
         self.laser_msg = LaserScan()  # LaserScan 메시지 타입 설정 및 초기화
-        self.rate = rospy.Rate(5)  # ROS 2-1단계(옵션): 퍼블리셔 - 주기 설정
+        self.rate = rospy.Rate(8)  # ROS 2-1단계(옵션): 퍼블리셔 - 주기 설정
         self.laser_flag = False  # LaserScan 메시지 수신 확인을 위한 변수 설정
         self.degrees = []  # 각도를 저장할 리스트 설정
         self.degrees_flag = False  # 각도 리스트 저장 확인을 위한 변수 설정
@@ -75,7 +75,7 @@ class Obs_detect:  # 클래스 이름 정의
                     if 0.1 < y < 0.45 and 0 < x < 0.45:
                         pub_obs_L_list.append(n)
                     # front obstacle detectionself.ranges
-                    if -0.175 < y < 0.1 and 0 < x < 0.82:
+                    if -0.175 < y < 0.1 and 0 < x < 1:
                         pub_obs_C_list.append(n)
 
                     # left obstacle detection
@@ -114,8 +114,8 @@ class Obs_detect:  # 클래스 이름 정의
                     self.pub_dist90_L.publish(sum(pub_dist90_L_list)/len(pub_dist90_L_list))
                     print("dist90_L: ", sum(pub_dist90_L_list)/len(pub_dist90_L_list))
                 else:
-                    self.pub_dist90_L.publish(0.5)
-                    print("dist90_L: ", 0.5)
+                    self.pub_dist90_L.publish(1)
+                    print("dist90_L: ", 1)
                 if len(pub_dist75_L_list) > 0:
                     self.pub_dist75_L.publish(sum(pub_dist75_L_list)/len(pub_dist75_L_list))
                     print("dist75_L: ", sum(pub_dist75_L_list)/len(pub_dist75_L_list))
