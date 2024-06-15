@@ -31,7 +31,7 @@ class OBS_Control:
         self.dist75L = 0.5
         self.distObsC = 0.5
         self.wall_dist = 0.3
-        self.kp = 3
+        self.kp = 2.8
         self.pre_steer = 0
 
         self.rate = rospy.Rate(8)
@@ -58,12 +58,13 @@ class OBS_Control:
         steer = -20
         
 
-        if not self.obsC and self.obsL and 0.25 < self.dist75L:  # 왼쪽 벽 fllow(멀리 있을 때)
-            speed = 0.4
+        if not self.obsC and self.obsL and 0.25 < self.dist75L:  # 왼쪽 벽 따라가기 (멀리 있을 때)
+            speed = 0.35
             if self.dist90L == 0:
                 speed = 0.0
                 steer = self.pre_steer
                 print('dist90L = 0')
+        
             else:
                 value = self.dist90L / self.dist75L
                 if value > 1:
@@ -71,10 +72,15 @@ class OBS_Control:
                 elif value < -1:
                     value = -1
 
-                theta = math.acos(value) * 180 / math.pi
-                print('theta:', theta)
-                steer = ((15 - theta) * math.pi / 180 + self.kp * (self.wall_dist - self.dist90L))
-                print("steer:", steer)
+            theta = math.acos(value) * 180 / math.pi
+            
+            # theta의 최대값을 40으로 제한
+            if theta > 23:
+                theta = 10
+
+            print('theta:', theta)
+            steer = ((15 - theta) * math.pi / 180 + self.kp * (self.wall_dist - self.dist90L))
+            print("steer:", steer)
             print('Follow LEFT wall')
 
         elif not self.obsC and self.dist75L < 0.249:  # 왼쪽 벽 fllow(가까이)
@@ -83,13 +89,13 @@ class OBS_Control:
             print("!!!!!!!!!!left warning!!!!!!!!!!")
 
         elif self.distObsC < 0.6 and self.obsL: #오른쪽으로 조향
-                if 0.5 < self.distObsC < 0.59:  
+                if 0.31 < self.distObsC < 0.59:  
                     speed = 0.2
-                    steer = -0.4
+                    steer = -20
                     print("jicjin")
 
-                elif self.distObsC < 0.49:
-                    speed = 0.1
+                elif self.distObsC < 0.3:
+                    speed = 0.15
                     steer = -20
                     print("turn")
 
@@ -102,12 +108,12 @@ class OBS_Control:
         
         elif self.obsC and self.dist75R < 0.5:  
             # 처음 왼쪽으로 하는 구간 
-            speed = 0.25
+            speed = 0.2
             steer = 20
             print('Turning left2')
 
         elif self.obsC and not self.obsR and not self.obsL:  
-                speed = 0.25
+                speed = 0.2
                 steer = 20
                 print('Turning left3')
 
