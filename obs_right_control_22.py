@@ -51,10 +51,10 @@ class OBS_Control:
         self.obsC = data.data
     def control(self):
         # 기본 속도 및 조향 각도 초기화
-        speed = 0.35
+        speed = 0.6
         steer = -20
 
-        if not self.obsC and self.obsR and 0.25 < self.dist75R:  # 오른쪽 벽 따라가기
+        if not self.obsC and self.obsR and 0.26 < self.dist75R:  # 오른쪽 벽 따라가기
             speed = 0.4
             if self.dist90R == 0:
                 speed = 0.0
@@ -73,22 +73,22 @@ class OBS_Control:
                 print("steer:", steer)
             print('Follow RIGHT wall')
 
-        elif not self.obsC and self.dist75R < 0.249:  # 오른쪽 벽 따라가기
-            speed = 0.3
-            steer = 0.425
+        elif not self.obsC and self.dist75R < 0.259:  # 오른쪽 벽 따라가기
+            speed = 0.35
+            steer = 0.525
             print("!!!!!!!!!!!!!warning!!!!!!!!!!!!")
 
         #elif self.obsC and self.obsR and self.obsL:  # 모든 방향에 장애물 존재 시 정지
             #speed = 0
             #steer = 0
             #rospy.loginfo('Stop due to obstacles on all sides')
-        elif self.obsC and self.obsL:  
-            speed = 0.35
+        elif self.obsC < 0.7 and self.obsL:  
+            speed = 0.7
             steer = -20
             print('Turning right')
 
-        elif self.obsC and self.obsR: #and not self.obsL:   왼쪽으로 회전
-            speed = 0.35
+        elif self.obsC and self.obsR or 0.28< self.dist75R < 0.34: #and not self.obsL:   왼쪽으로 회전
+            speed = 0.7
             steer = 20
             print('Turning left')
         else:
