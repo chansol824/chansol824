@@ -75,7 +75,7 @@ class Obs_detect:  # 클래스 이름 정의
                     if 0.1 < y < 0.45 and 0 < x < 0.45:
                         pub_obs_L_list.append(n)
                     # front obstacle detectionself.ranges
-                    if -0.175 < y < 0.1 and 0 < x < 1:
+                    if -0.175 < y < 0.1 and 0 < x < 0.96:
                         pub_obs_C_list.append(n)
 
                     # left obstacle detection
